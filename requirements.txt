@@ -1,0 +1,13 @@
+uvicorn
+python-fasthtml
+pydantic
+SQLAlchemy
+fastsql
+pandas
+MonsterUI
+plotly
+altair
+fh_altair
+requests
+pydantic_settings
+psycopg2
