@@ -9,4 +9,15 @@ CREATE TABLE IF NOT EXISTS public.variables
     PRIMARY KEY (instalacion, equipo, id_variable)
 );
 
+-- create the table registros
+CREATE TABLE IF NOT EXISTS public.registros
+(
+    instalacion varchar,
+ 	fecha timestamp,
+    variable varchar,
+    valor float,
+    PRIMARY KEY (instalacion, fecha, variable)
+);
+
+
 -- Data

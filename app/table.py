@@ -19,12 +19,9 @@ def table_valores(body_data):
 def pagina_final():
     valores = get_all()
     return Title("Variables"), Container(
-            
             H2("Variables de la instalación"),
             DivRAligned(
-                Button(UkIcon("plus-circle", cls="mr-2"), "Actualizar", cls=ButtonT.primary, hx_post="/update"),
-                Button("Graficas", cls=ButtonT.primary, hx_post="/graficas",),
-                Button("Control", cls=ButtonT.destructive, hx_post="/control_vari"),
+                Button("Volver", cls=ButtonT.primary, hx_post="/volver",),
             ), 
             table_valores(valores),
             Loading(htmx_indicator=True, type=LoadingT.dots, cls="fixed top-0 right-0 m-4"),

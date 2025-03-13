@@ -1,6 +1,7 @@
 import requests
 import json
 import pandas as pd
+import time
 
 from app.config import settings
 
@@ -57,7 +58,7 @@ def SolarChargerSummary():
     return(valores)
 
 def SystemSummary():
-    url = url_vrm + "/installations/105393/widgets/Status"
+    url = url_vrm + "/widgets/Status"
     querystring = {"instance":"0"}
     response = requests.request("GET", url, headers=headers, params=querystring)
     valores = json.loads(response.text)
@@ -75,3 +76,22 @@ def SystemSummary():
         'V1_OUT': V1_OUT, 'I1_OUT': I1_OUT, 'PA1_OUT': PA1_OUT,
         'V_DC': V_DC, 'I_DC': I_DC, 'State': State, 'Temp': Temp}
     return(valores)
+
+def Grafica(fecha_inicio, fecha_fin, equipo_id, variables_id):
+    equipo_id = "512"
+    fecha_inicio = int(time.mktime(fecha_inicio.timetuple()))
+    fecha_fin = int(time.mktime(fecha_fin.timetuple()))
+    url = url_vrm + "/widgets/Graph"
+    #querystring = {"attributeIds[]":{"47","49", "51", "174"},"instance":equipo_id,"start":fecha_inicio,"end":fecha_fin}
+    querystring = {"attributeIds[]":{variables_id},"instance":equipo_id,"start":fecha_inicio,"end":fecha_fin}
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    valores = json.loads(response.text)
+    valores_df = []
+    for i in valores['records']['data']:
+        df = pd.DataFrame(valores['records']['data'][i], columns=['fecha', i])
+        df = df.set_index('fecha')
+        valores_df.append(df)
+    result = pd.concat(valores_df, axis=1)
+    result = result.reset_index()
+    result['fecha'] = pd.to_datetime(result['fecha'], unit='s')
+    return(result)
